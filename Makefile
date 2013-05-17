@@ -1,0 +1,3 @@
+run:
+	go build
+	./sd
