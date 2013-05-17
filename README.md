@@ -1,9 +1,16 @@
 # Simple Discovery
 
-Status: Under Development
+Status: *Under Development*
 
 This is an opinionated registry for registering tuples of
 zone/product/environment/job/instance/service that map to host:port pairs.
+
+# Installing
+
+  * [Download and install Go 1.1](http://golang.org/doc/install)
+  * Run `go build && ./sd &`
+  * Run `./populate.sh`
+  * Run `links http://localhost:8080/`
 
 # LICENSE
 
