@@ -76,6 +76,7 @@ The instance number of the found host:port pair is found and renewed.
 PUT /zone/product/environment/job:service
 host:port
 ```
+```
 200 OK
 Expires: Thu, 01 Dec 2013 17:00:00 GMT
 
