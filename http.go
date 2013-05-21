@@ -11,6 +11,7 @@ import (
 	"time"
 )
 
+// TODO JSONify
 type address struct {
 	host string
 	port string
@@ -18,6 +19,7 @@ type address struct {
 
 func (a address) String() string { return a.host + ":" + a.port }
 
+// TODO JSONify
 type binding struct {
 	resource
 	address
@@ -168,22 +170,13 @@ func (h directory) match(w http.ResponseWriter, r *http.Request, res resource) {
 }
 
 func (h directory) browse(w http.ResponseWriter, r *http.Request) {
-	res := resource{}
-	parts := res.parts()
-
-	names := strings.Split(strings.Trim(r.URL.Path, "/"), "/")
-	if len(names) > len(parts) {
+	res := maybePartialResourceFromPath(r.URL.Path)
+	if res == nil {
 		http.Error(w, "Path too long", http.StatusBadRequest)
 		return
 	}
-	for i, name := range names {
-		if name != "" {
-			parts[i].name = name
-			parts[i].set = true
-		}
-	}
 
-	resources, found, err := h.store.Browse(res)
+	resources, found, err := h.store.Browse(*res)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

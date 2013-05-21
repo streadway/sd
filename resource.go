@@ -2,6 +2,7 @@ package main
 
 import (
 	"regexp"
+	"strings"
 )
 
 type part struct {
@@ -28,6 +29,23 @@ var resourceRegexp = regexp.MustCompile(`^` +
 	`(?::([a-z*][a-z0-9-]{0,62}))?` + // /instance:service
 	`$`,
 )
+
+func maybePartialResourceFromPath(path string) *resource {
+	res := new(resource)
+	parts := res.parts()
+
+	names := strings.Split(strings.Trim(path, "/"), "/")
+	if len(names) > len(parts) {
+		return nil
+	}
+	for i, name := range names {
+		if name != "" {
+			parts[i].name = name
+			parts[i].set = true
+		}
+	}
+	return res
+}
 
 func ParseResource(path string) (resource, bool) {
 	r := resource{}
@@ -84,6 +102,22 @@ func (r resource) Any() bool {
 		}
 	}
 	return false
+}
+
+func (r resource) Match(other resource) bool {
+	theirs := other.parts()
+	for i, mine := range r.parts() {
+		if i > len(theirs) {
+			return true
+		}
+		if mine.any {
+			continue
+		}
+		if mine.set && mine.name != theirs[i].name {
+			return false
+		}
+	}
+	return true
 }
 
 func (r resource) String() (s string) {

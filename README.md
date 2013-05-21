@@ -12,6 +12,14 @@ zone/product/environment/job/instance/service that map to host:port pairs.
   * Run `./populate.sh`
   * Run `links http://localhost:8080/`
 
+# TODO
+
+  * rename address to Endpoint
+  * export datatypes for JSON serialization
+  * implement passive discovery (watches)
+  * contextualize errors out of storage implementations
+  * stronger "part" type with Match() and String()
+
 # LICENSE
 
 (waiting until the code settles before a more permissive license)
